@@ -1,0 +1,29 @@
+{
+  "description": "Benchmark ideas for retrieval and recommendation quality evaluation",
+  "cases": [
+    {
+      "id": "medical-chatbot",
+      "idea": "I want to build a medical chatbot",
+      "expected_domain": "healthcare",
+      "expected_task_contains": "question",
+      "expected_repo_keywords": ["medical", "health", "chatbot", "bio", "clinical"],
+      "expected_model_tasks": ["text-generation", "feature-extraction"]
+    },
+    {
+      "id": "coding-agent",
+      "idea": "I want to build autonomous coding agent",
+      "expected_domain": "software engineering",
+      "expected_task_contains": "agent",
+      "expected_repo_keywords": ["agent", "code", "interpreter", "aider", "engineer"],
+      "expected_model_tasks": ["text-generation"]
+    },
+    {
+      "id": "vision-inspector",
+      "idea": "Build a quality control system that detects defects in product images",
+      "expected_domain": "general",
+      "expected_task_contains": "vision",
+      "expected_repo_keywords": ["vision", "detect", "yolo", "opencv"],
+      "expected_model_tasks": ["image-classification", "object-detection"]
+    }
+  ]
+}

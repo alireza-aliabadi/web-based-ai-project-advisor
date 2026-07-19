@@ -1,0 +1,192 @@
+{
+  "requirements": {
+    "domain": "Healthcare",
+    "task": "Develop a medical chatbot",
+    "modality": "Conversational AI",
+    "requirements": [
+      "Natural language processing capabilities",
+      "Integration with medical databases for accurate information",
+      "User-friendly interface for patients",
+      "Ability to handle common medical queries",
+      "Privacy and security measures for patient data",
+      "Multilingual support for diverse patient populations",
+      "Option for escalation to human healthcare professionals",
+      "Regular updates with the latest medical guidelines and information"
+    ],
+    "query": "I want to build a medical chatbot",
+    "skill_level": "intermediate"
+  },
+  "repositories": [
+    {
+      "name": "Health-Care-Chatbot",
+      "full_name": "amberkakkar01/Health-Care-Chatbot",
+      "description": "It is a medical chatbot that will provide quick answers to FAQs by setting up rule-based keyword chatbots.",
+      "url": "https://github.com/amberkakkar01/Health-Care-Chatbot",
+      "stars": 431,
+      "forks": 140,
+      "language": "Jupyter Notebook",
+      "topics": [
+        "artificial-intelligence",
+        "chatbot",
+        "chatterbot",
+        "college-project",
+        "dense-layer",
+        "dense-neural-network",
+        "final-year-project",
+        "health-care-chatbot",
+        "health-check",
+        "healthcare",
+        "heart-disease",
+        "heart-disease-prediction",
+        "json-chatbot",
+        "medical-chatbot",
+        "neural-networks",
+        "nlp-keywords-extraction",
+        "nlp-machine-learning",
+        "nlp-parsing",
+        "nltk-python",
+        "prediction"
+      ],
+      "last_update": "2026-07-15T15:43:49Z",
+      "score": 0.6752887326377051,
+      "why": "strong semantic match to your idea; written in Jupyter Notebook"
+    },
+    {
+      "name": "Multi-Agent-Medical-Assistant",
+      "full_name": "souvikmajumder26/Multi-Agent-Medical-Assistant",
+      "description": "\u2695\ufe0fGenAI powered multi-agentic medical diagnostics and healthcare research assistance chatbot. \ud83c\udfe5 Designed for healthcare professionals, researchers and patients.",
+      "url": "https://github.com/souvikmajumder26/Multi-Agent-Medical-Assistant",
+      "stars": 930,
+      "forks": 205,
+      "language": "Python",
+      "topics": [
+        "agent",
+        "agentic-ai",
+        "agents",
+        "chatbot",
+        "computer-vision",
+        "disease-detection",
+        "genai",
+        "genai-chatbot",
+        "generative-ai",
+        "guardrails",
+        "langchain",
+        "langgraph",
+        "large-language-models",
+        "llm",
+        "medical-image-processing",
+        "medical-imaging",
+        "python",
+        "rag",
+        "retrieval-augmented-generation",
+        "vector-database"
+      ],
+      "last_update": "2026-07-17T23:44:03Z",
+      "score": 0.666162246313722,
+      "why": "strong semantic match to your idea; written in Python"
+    }
+  ],
+  "models": [
+    {
+      "name": "sentence-transformers/all-MiniLM-L6-v2",
+      "task": "feature-extraction",
+      "downloads": 5000000,
+      "likes": 2000,
+      "architecture": "bert",
+      "license": "apache-2.0",
+      "framework": "sentence-transformers",
+      "url": "https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2",
+      "score": 0.511627000565758,
+      "hardware": "CPU friendly",
+      "why": "task: feature-extraction; widely downloaded"
+    },
+    {
+      "name": "mistralai/Mistral-7B-Instruct-v0.3",
+      "task": "text-generation",
+      "downloads": 1500000,
+      "likes": 4000,
+      "architecture": "mistral",
+      "license": "apache-2.0",
+      "framework": "transformers",
+      "url": "https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3",
+      "score": 0.5062817753155657,
+      "hardware": "GPU 12+ GB VRAM",
+      "why": "task: text-generation; widely downloaded"
+    },
+    {
+      "name": "meta-llama/Meta-Llama-3.1-8B-Instruct",
+      "task": "text-generation",
+      "downloads": 2000000,
+      "likes": 5000,
+      "architecture": "llama",
+      "license": "llama3.1",
+      "framework": "transformers",
+      "url": "https://huggingface.co/meta-llama/Meta-Llama-3.1-8B-Instruct",
+      "score": 0.5038502650241814,
+      "hardware": "GPU 16+ GB VRAM",
+      "why": "task: text-generation; widely downloaded"
+    },
+    {
+      "name": "BAAI/bge-small-en-v1.5",
+      "task": "feature-extraction",
+      "downloads": 1000000,
+      "likes": 800,
+      "architecture": "bert",
+      "license": "mit",
+      "framework": "sentence-transformers",
+      "url": "https://huggingface.co/BAAI/bge-small-en-v1.5",
+      "score": 0.49874414890434016,
+      "hardware": "CPU friendly",
+      "why": "task: feature-extraction; widely downloaded"
+    },
+    {
+      "name": "openai/whisper-large-v3",
+      "task": "automatic-speech-recognition",
+      "downloads": 800000,
+      "likes": 1500,
+      "architecture": "whisper",
+      "license": "apache-2.0",
+      "framework": "transformers",
+      "url": "https://huggingface.co/openai/whisper-large-v3",
+      "score": 0.496799870308165,
+      "hardware": "GPU recommended",
+      "why": "task: automatic-speech-recognition; widely downloaded"
+    }
+  ],
+  "search_results": [
+    {
+      "title": "Building production RAG systems",
+      "url": "https://www.anthropic.com/research",
+      "snippet": "Patterns for retrieval-augmented generation around: I want to build a medical chatbot"
+    },
+    {
+      "title": "Hugging Face Tasks Guide",
+      "url": "https://huggingface.co/tasks",
+      "snippet": "Model tasks and pipelines relevant to AI project design"
+    },
+    {
+      "title": "Awesome LLM Apps",
+      "url": "https://github.com/Shubhamsaboo/awesome-llm-apps",
+      "snippet": "Curated list of LLM applications and architectures"
+    }
+  ],
+  "architecture": "System for Healthcare (Develop a medical chatbot / Conversational AI):\n\n1. Client \u2014 web or API consumers submit requests.\n2. API Gateway \u2014 auth, rate limits, request routing.\n3. Orchestrator \u2014 requirement-aware workflow (Develop a medical chatbot).\n4. Model layer \u2014 LLM / task models from Hugging Face or managed APIs.\n5. Knowledge layer \u2014 application database and prompt context.\n6. Persistence \u2014 PostgreSQL for sessions and audit; Redis for cache.\n7. Observability \u2014 logs, metrics, traces.",
+  "mermaid_diagram": "flowchart LR\n  U[User] --> FE[Web App]\n  FE --> API[API Gateway]\n  API --> ORCH[Orchestrator]\n  ORCH --> LLM[LLM]\n  ORCH --> DB[(PostgreSQL)]\n  ORCH --> CACHE[(Redis)]\n",
+  "tech_stack": [
+    "Python",
+    "FastAPI",
+    "PostgreSQL",
+    "Docker"
+  ],
+  "roadmap": [
+    "Phase 1: Clarify requirements, data sources, and success metrics",
+    "Phase 2: Prototype model + minimal API with evaluation set",
+    "Phase 3: Add retrieval/tools, harden prompts, measure quality",
+    "Phase 4: Productionize auth, caching, monitoring, and deployment",
+    "Phase 5: Iterate from user feedback and cost/latency budgets"
+  ],
+  "deployment": "Docker Compose for MVP; migrate to Kubernetes or a managed container platform when traffic grows. Prefer managed LLM APIs early; add self-hosted inference (vLLM/Ollama) when cost or privacy requires it.",
+  "hardware": "CPU-friendly for embeddings/classification; GPU optional for throughput.",
+  "cost_estimate": "MVP: $20\u2013200/mo (API + small VPS). Scale: dominated by LLM tokens and GPU inference; cache aggressively and use smaller models for routing.",
+  "summary": "Plan for a Healthcare Develop a medical chatbot system (Conversational AI modality).\n\n## Recommended repositories\n- [amberkakkar01/Health-Care-Chatbot](https://github.com/amberkakkar01/Health-Care-Chatbot) \u2b50 431 \u2014 strong semantic match to your idea; written in Jupyter Notebook\n- [souvikmajumder26/Multi-Agent-Medical-Assistant](https://github.com/souvikmajumder26/Multi-Agent-Medical-Assistant) \u2b50 930 \u2014 strong semantic match to your idea; written in Python\n\n## Recommended models\n- [sentence-transformers/all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) \u2014 feature-extraction (task: feature-extraction; widely downloaded)\n- [mistralai/Mistral-7B-Instruct-v0.3](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3) \u2014 text-generation (task: text-generation; widely downloaded)\n- [meta-llama/Meta-Llama-3.1-8B-Instruct](https://huggingface.co/meta-llama/Meta-Llama-3.1-8B-Instruct) \u2014 text-generation (task: text-generation; widely downloaded)\n- [BAAI/bge-small-en-v1.5](https://huggingface.co/BAAI/bge-small-en-v1.5) \u2014 feature-extraction (task: feature-extraction; widely downloaded)\n- [openai/whisper-large-v3](https://huggingface.co/openai/whisper-large-v3) \u2014 automatic-speech-recognition (task: automatic-speech-recognition; widely downloaded)\n\n## Architecture\nSystem for Healthcare (Develop a medical chatbot / Conversational AI):\n\n1. Client \u2014 web or API consumers submit requests.\n2. API Gateway \u2014 auth, rate limits, request routing.\n3. Orchestrator \u2014 requirement-aware workflow (Develop a medical chatbot).\n4. Model layer \u2014 LLM / task models from Hugging Face or managed APIs.\n5. Knowledge layer \u2014 application database and prompt context.\n6. Persistence \u2014 PostgreSQL for sessions and audit; Redis for cache.\n7. Observability \u2014 logs, metrics, traces.\n\n```mermaid\nflowchart LR\n  U[User] --> FE[Web App]\n  FE --> API[API Gateway]\n  API --> ORCH[Orchestrator]\n  ORCH --> LLM[LLM]\n  ORCH --> DB[(PostgreSQL)]\n  ORCH --> CACHE[(Redis)]\n```\n\n## Tech stack\n- Python\n- FastAPI\n- PostgreSQL\n- Docker\n\n## Roadmap\n1. Phase 1: Clarify requirements, data sources, and success metrics\n1. Phase 2: Prototype model + minimal API with evaluation set\n1. Phase 3: Add retrieval/tools, harden prompts, measure quality\n1. Phase 4: Productionize auth, caching, monitoring, and deployment\n1. Phase 5: Iterate from user feedback and cost/latency budgets\n\n## Deployment\nDocker Compose for MVP; migrate to Kubernetes or a managed container platform when traffic grows. Prefer managed LLM APIs early; add self-hosted inference (vLLM/Ollama) when cost or privacy requires it.\n\n## Hardware\nCPU-friendly for embeddings/classification; GPU optional for throughput.\n\n## Cost estimate\nMVP: $20\u2013200/mo (API + small VPS). Scale: dominated by LLM tokens and GPU inference; cache aggressively and use smaller models for routing."
+}
