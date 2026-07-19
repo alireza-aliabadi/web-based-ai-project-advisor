@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  web-advisor-api:
+    name: Web Advisor API
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web-advisor-api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.23"
+          cache-dependency-path: web-advisor-api/go.sum
+      - name: Download modules
+        run: go mod download
+      - name: Vet
+        run: go vet ./...
+      - name: Test
+        run: go test ./... -count=1
+      - name: Build
+        run: go build -o /tmp/architect ./cmd/server
+
+  docker:
+    name: Docker build
+    runs-on: ubuntu-latest
+    needs: [web-advisor-api]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build API image
+        run: docker build -t architect-api ./web-advisor-api
