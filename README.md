@@ -132,7 +132,7 @@ Full sample payload: [examples/medical/response.json](examples/medical/response.
 **Backend:** Go, Fiber, PostgreSQL, Redis, Qdrant  
 **AI:** OpenAI-compatible LLM + embeddings  
 **External:** GitHub, Hugging Face, Tavily  
-**Ops:** Docker Compose, Prometheus, Grafana
+**Ops:** Docker Compose (Prometheus/Grafana run on a separate observability host)
 
 ## Development
 
