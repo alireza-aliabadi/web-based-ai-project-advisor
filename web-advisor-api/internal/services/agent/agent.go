@@ -77,8 +77,8 @@ func (s *Service) Recommend(ctx context.Context, idea string, prefs *models.Anal
 
 	repos = s.ranker.RankRepos(queryVec, repos, embedOne)
 	mods = s.ranker.RankModels(queryVec, mods, embedOne)
-	if len(repos) > 5 {
-		repos = repos[:5]
+	if len(repos) > 2 {
+		repos = repos[:2]
 	}
 	if len(mods) > 5 {
 		mods = mods[:5]

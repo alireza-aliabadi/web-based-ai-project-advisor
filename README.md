@@ -60,6 +60,73 @@ curl -s -X POST http://localhost:8080/api/v1/analyze \
   -d '{"idea":"I want to build a medical chatbot"}'
 ```
 
+### Response shape (`POST /api/v1/analyze`)
+
+```json
+{
+  "requirements": {
+    "domain": "string",
+    "task": "string",
+    "modality": "string",
+    "requirements": ["string"],
+    "query": "string",
+    "skill_level": "string",
+    "languages": ["string"],
+    "hardware": "string"
+  },
+  "repositories": [
+    {
+      "name": "string",
+      "full_name": "owner/repo",
+      "description": "string",
+      "url": "https://github.com/...",
+      "stars": 0,
+      "forks": 0,
+      "language": "string",
+      "topics": ["string"],
+      "last_update": "RFC3339 timestamp",
+      "score": 0.0,
+      "why": "string"
+    }
+  ],
+  "models": [
+    {
+      "name": "org/model",
+      "task": "string",
+      "downloads": 0,
+      "likes": 0,
+      "architecture": "string",
+      "license": "string",
+      "framework": "string",
+      "url": "https://huggingface.co/...",
+      "score": 0.0,
+      "hardware": "string",
+      "why": "string"
+    }
+  ],
+  "search_results": [
+    {
+      "title": "string",
+      "url": "string",
+      "snippet": "string",
+      "score": 0.0
+    }
+  ],
+  "architecture": "string",
+  "mermaid_diagram": "string",
+  "tech_stack": ["string"],
+  "roadmap": ["string"],
+  "deployment": "string",
+  "hardware": "string",
+  "cost_estimate": "string",
+  "summary": "string"
+}
+```
+
+`repositories` is capped at the top 2 similar open-source projects (not infra/tooling libraries). `models` returns up to 5 Hugging Face recommendations.
+
+Full sample payload: [examples/medical/response.json](examples/medical/response.json).
+
 ## Tech Stack
 
 **Backend:** Go, Fiber, PostgreSQL, Redis, Qdrant  
