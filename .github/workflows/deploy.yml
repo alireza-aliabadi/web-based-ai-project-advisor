@@ -25,6 +25,7 @@ jobs:
       DEPLOY_PORT: ${{ vars.DEPLOY_PORT }}
       DEPLOY_USER: ${{ vars.DEPLOY_USER }}
       DEPLOY_PATH: ${{ vars.DEPLOY_PATH }}
+      API_HOST_PORT: ${{ vars.API_HOST_PORT }}
 
     steps:
       - name: Check out tested revision
@@ -34,7 +35,7 @@ jobs:
 
       - name: Validate deployment settings
         run: |
-          for key in DEPLOY_HOST DEPLOY_PORT DEPLOY_USER DEPLOY_PATH; do
+          for key in DEPLOY_HOST DEPLOY_PORT DEPLOY_USER DEPLOY_PATH API_HOST_PORT; do
             if [ -z "${!key}" ]; then
               echo "::error::$key is not configured as a GitHub Actions variable"
               exit 1
@@ -46,29 +47,29 @@ jobs:
           APP_ENV: ${{ vars.APP_ENV }}
           APP_PORT: ${{ vars.APP_PORT }}
           API_HOST_PORT: ${{ vars.API_HOST_PORT }}
-          APP_JWT_SECRET: ${{ secrets.APP_JWT_SECRET }}
-          APP_API_KEY: ${{ secrets.APP_API_KEY }}
+          APP_JWT_SECRET: ${{ vars.APP_JWT_SECRET }}
+          APP_API_KEY: ${{ vars.APP_API_KEY }}
           POSTGRES_HOST: postgres
           POSTGRES_PORT: "5432"
           POSTGRES_HOST_PORT: ${{ vars.POSTGRES_HOST_PORT }}
           POSTGRES_USER: ${{ vars.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_PASSWORD: ${{ vars.POSTGRES_PASSWORD }}
           POSTGRES_DB: ${{ vars.POSTGRES_DB }}
           REDIS_ADDR: redis:6379
           REDIS_HOST_PORT: ${{ vars.REDIS_HOST_PORT }}
-          REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+          REDIS_PASSWORD: ${{ vars.REDIS_PASSWORD }}
           REDIS_DB: ${{ vars.REDIS_DB }}
           QDRANT_URL: http://qdrant:6333
           QDRANT_HOST_PORT: ${{ vars.QDRANT_HOST_PORT }}
           QDRANT_GRPC_HOST_PORT: ${{ vars.QDRANT_GRPC_HOST_PORT }}
           QDRANT_COLLECTION: ${{ vars.QDRANT_COLLECTION }}
-          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          LLM_API_KEY: ${{ vars.LLM_API_KEY }}
           LLM_BASE_URL: ${{ vars.LLM_BASE_URL }}
           LLM_MODEL: ${{ vars.LLM_MODEL }}
           EMBEDDING_MODEL: ${{ vars.EMBEDDING_MODEL }}
-          GITHUB_TOKEN_VALUE: ${{ secrets.ADVISOR_GITHUB_TOKEN }}
-          HUGGINGFACE_TOKEN: ${{ secrets.HUGGINGFACE_TOKEN }}
-          TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
+          GITHUB_TOKEN_VALUE: ${{ vars.ADVISOR_GITHUB_TOKEN }}
+          HUGGINGFACE_TOKEN: ${{ vars.HUGGINGFACE_TOKEN }}
+          TAVILY_API_KEY: ${{ vars.TAVILY_API_KEY }}
         run: |
           umask 077
           python3 <<'PY'
@@ -89,7 +90,7 @@ jobs:
           ]
           missing = [key for key in required if not os.environ.get(key)]
           if missing:
-              raise SystemExit("Missing required GitHub secrets: " + ", ".join(missing))
+              raise SystemExit("Missing required GitHub variables: " + ", ".join(missing))
 
           lines = [f"{key}={os.environ.get(key, '')}" for key in keys]
           lines.append(f"GITHUB_TOKEN={os.environ.get('GITHUB_TOKEN_VALUE', '')}")
@@ -98,8 +99,12 @@ jobs:
 
       - name: Configure SSH
         env:
-          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_SSH_KEY: ${{ vars.DEPLOY_SSH_KEY }}
         run: |
+          if [ -z "$DEPLOY_SSH_KEY" ]; then
+            echo "::error::DEPLOY_SSH_KEY is not configured as a GitHub Actions variable"
+            exit 1
+          fi
           install -d -m 700 ~/.ssh
           printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
