@@ -1,0 +1,135 @@
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to production
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    env:
+      DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
+      DEPLOY_PORT: ${{ vars.DEPLOY_PORT }}
+      DEPLOY_USER: ${{ vars.DEPLOY_USER }}
+      DEPLOY_PATH: ${{ vars.DEPLOY_PATH }}
+
+    steps:
+      - name: Check out tested revision
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+      - name: Validate deployment settings
+        run: |
+          for key in DEPLOY_HOST DEPLOY_PORT DEPLOY_USER DEPLOY_PATH; do
+            if [ -z "${!key}" ]; then
+              echo "::error::$key is not configured as a GitHub Actions variable"
+              exit 1
+            fi
+          done
+
+      - name: Create production environment
+        env:
+          APP_ENV: ${{ vars.APP_ENV }}
+          APP_PORT: ${{ vars.APP_PORT }}
+          API_HOST_PORT: ${{ vars.API_HOST_PORT }}
+          APP_JWT_SECRET: ${{ secrets.APP_JWT_SECRET }}
+          APP_API_KEY: ${{ secrets.APP_API_KEY }}
+          POSTGRES_HOST: postgres
+          POSTGRES_PORT: "5432"
+          POSTGRES_HOST_PORT: ${{ vars.POSTGRES_HOST_PORT }}
+          POSTGRES_USER: ${{ vars.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ vars.POSTGRES_DB }}
+          REDIS_ADDR: redis:6379
+          REDIS_HOST_PORT: ${{ vars.REDIS_HOST_PORT }}
+          REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+          REDIS_DB: ${{ vars.REDIS_DB }}
+          QDRANT_URL: http://qdrant:6333
+          QDRANT_HOST_PORT: ${{ vars.QDRANT_HOST_PORT }}
+          QDRANT_GRPC_HOST_PORT: ${{ vars.QDRANT_GRPC_HOST_PORT }}
+          QDRANT_COLLECTION: ${{ vars.QDRANT_COLLECTION }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          LLM_BASE_URL: ${{ vars.LLM_BASE_URL }}
+          LLM_MODEL: ${{ vars.LLM_MODEL }}
+          EMBEDDING_MODEL: ${{ vars.EMBEDDING_MODEL }}
+          GITHUB_TOKEN_VALUE: ${{ secrets.ADVISOR_GITHUB_TOKEN }}
+          HUGGINGFACE_TOKEN: ${{ secrets.HUGGINGFACE_TOKEN }}
+          TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
+        run: |
+          umask 077
+          python3 <<'PY'
+          import os
+          from pathlib import Path
+
+          keys = [
+              "APP_ENV", "APP_PORT", "API_HOST_PORT", "APP_JWT_SECRET", "APP_API_KEY",
+              "POSTGRES_HOST", "POSTGRES_PORT", "POSTGRES_HOST_PORT", "POSTGRES_USER",
+              "POSTGRES_PASSWORD", "POSTGRES_DB", "REDIS_ADDR", "REDIS_HOST_PORT",
+              "REDIS_PASSWORD", "REDIS_DB", "QDRANT_URL", "QDRANT_HOST_PORT",
+              "QDRANT_GRPC_HOST_PORT", "QDRANT_COLLECTION", "LLM_API_KEY",
+              "LLM_BASE_URL", "LLM_MODEL", "EMBEDDING_MODEL", "HUGGINGFACE_TOKEN",
+              "TAVILY_API_KEY",
+          ]
+          required = [
+              "APP_JWT_SECRET", "APP_API_KEY", "POSTGRES_PASSWORD", "LLM_API_KEY",
+          ]
+          missing = [key for key in required if not os.environ.get(key)]
+          if missing:
+              raise SystemExit("Missing required GitHub secrets: " + ", ".join(missing))
+
+          lines = [f"{key}={os.environ.get(key, '')}" for key in keys]
+          lines.append(f"GITHUB_TOKEN={os.environ.get('GITHUB_TOKEN_VALUE', '')}")
+          Path(".env").write_text("\n".join(lines) + "\n", encoding="utf-8")
+          PY
+
+      - name: Configure SSH
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -T 15 -p "$DEPLOY_PORT" -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
+
+      - name: Create deployment directory
+        run: |
+          ssh -i ~/.ssh/deploy_key -p "$DEPLOY_PORT" \
+            "$DEPLOY_USER@$DEPLOY_HOST" "mkdir -p '$DEPLOY_PATH'"
+
+      - name: Upload application
+        run: |
+          rsync -az --delete \
+            --exclude '.git/' \
+            --exclude '.github/' \
+            --exclude '.cursor/' \
+            -e "ssh -i ~/.ssh/deploy_key -p $DEPLOY_PORT" \
+            ./ "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/"
+
+      - name: Start application
+        run: |
+          ssh -i ~/.ssh/deploy_key -p "$DEPLOY_PORT" \
+            "$DEPLOY_USER@$DEPLOY_HOST" \
+            "cd '$DEPLOY_PATH' && \
+             docker compose pull && \
+             docker compose up -d --build --remove-orphans && \
+             docker compose ps && \
+             for attempt in \$(seq 1 30); do \
+               if curl --fail --silent http://127.0.0.1:$API_HOST_PORT/health >/dev/null; then exit 0; fi; \
+               sleep 2; \
+             done; \
+             docker compose logs --tail=100 api; \
+             exit 1"
