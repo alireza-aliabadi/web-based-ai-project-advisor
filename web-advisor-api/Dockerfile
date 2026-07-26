@@ -1,6 +1,7 @@
 # Build
 FROM public.ecr.aws/docker/library/golang:1.23-alpine AS builder
 WORKDIR /app
+ENV GOPROXY=https://goproxy.cn,direct
 RUN apk add --no-cache git ca-certificates
 COPY go.mod go.sum ./
 RUN go mod download
