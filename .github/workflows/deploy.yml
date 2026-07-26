@@ -106,8 +106,21 @@ jobs:
             exit 1
           fi
           install -d -m 700 ~/.ssh
-          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
+          # GitHub Variables mangle multiline PEM; prefer base64, also accept literal \n.
+          if printf '%s' "$DEPLOY_SSH_KEY" | grep -q 'BEGIN .*PRIVATE KEY'; then
+            printf '%s\n' "$DEPLOY_SSH_KEY" | sed 's/\r$//' > ~/.ssh/deploy_key
+          else
+            printf '%s' "$DEPLOY_SSH_KEY" | tr -d '\n\r ' | base64 --decode > ~/.ssh/deploy_key
+          fi
+          # If the variable stored escaped newlines, normalize them.
+          if ! grep -q 'BEGIN .*PRIVATE KEY' ~/.ssh/deploy_key; then
+            printf '%s' "$DEPLOY_SSH_KEY" | sed 's/\\n/\n/g' > ~/.ssh/deploy_key
+          fi
           chmod 600 ~/.ssh/deploy_key
+          if ! ssh-keygen -y -f ~/.ssh/deploy_key >/dev/null 2>&1; then
+            echo "::error::DEPLOY_SSH_KEY is not a valid private key. Store base64 of the PEM in the variable."
+            exit 1
+          fi
           ssh-keyscan -T 15 -p "$DEPLOY_PORT" -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
 
       - name: Create deployment directory
