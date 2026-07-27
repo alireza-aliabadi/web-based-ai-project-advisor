@@ -69,7 +69,7 @@ func main() {
 	embedSvc := embedding.New(llmClient, cfg.QdrantURL, cfg.QdrantColl)
 	gh := githubsvc.New(cfg.GitHubToken, redisCache)
 	hf := huggingface.New(cfg.HFToken, redisCache)
-	web := search.New(cfg.TavilyAPIKey, redisCache)
+	web := search.New(cfg.TavilyAPIKey, cfg.TavilyBaseURL, redisCache)
 	agentSvc := agent.New(
 		requirements.New(llmClient),
 		gh, hf, web, embedSvc, ranking.New(), llmClient,
