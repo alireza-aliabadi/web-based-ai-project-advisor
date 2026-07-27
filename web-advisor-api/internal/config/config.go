@@ -26,6 +26,7 @@ type Config struct {
 	GitHubToken    string
 	HFToken        string
 	TavilyAPIKey   string
+	TavilyBaseURL  string
 }
 
 func Load() (*Config, error) {
@@ -50,6 +51,7 @@ func Load() (*Config, error) {
 		GitHubToken:    getEnv("GITHUB_TOKEN", ""),
 		HFToken:        getEnv("HUGGINGFACE_TOKEN", ""),
 		TavilyAPIKey:   getEnv("TAVILY_API_KEY", ""),
+		TavilyBaseURL:  strings.TrimRight(getEnv("TAVILY_BASE_URL", "https://api.tavily.com/search"), "/"),
 	}
 	return cfg, nil
 }

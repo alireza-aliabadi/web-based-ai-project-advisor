@@ -14,16 +14,18 @@ import (
 )
 
 type Service struct {
-	tavilyKey string
-	client    *http.Client
-	cache     *cache.Cache
+	tavilyKey     string
+	tavilyBaseURL string
+	client        *http.Client
+	cache         *cache.Cache
 }
 
-func New(tavilyKey string, c *cache.Cache) *Service {
+func New(tavilyKey, tavilyBaseURL string, c *cache.Cache) *Service {
 	return &Service{
-		tavilyKey: tavilyKey,
-		client:    &http.Client{Timeout: 20 * time.Second},
-		cache:     c,
+		tavilyKey:     tavilyKey,
+		tavilyBaseURL: tavilyBaseURL,
+		client:        &http.Client{Timeout: 20 * time.Second},
+		cache:         c,
 	}
 }
 
@@ -54,12 +56,12 @@ func (s *Service) Search(ctx context.Context, query string, limit int) ([]models
 func (s *Service) searchTavily(ctx context.Context, query string, limit int) ([]models.SearchResult, error) {
 	payload := map[string]any{
 		"api_key":      s.tavilyKey,
-		"query":        query + " AI framework architecture 2024 2025",
+		"query":        query + " AI framework architecture 2025 2026",
 		"search_depth": "basic",
 		"max_results":  limit,
 	}
 	b, _ := json.Marshal(payload)
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, "https://api.tavily.com/search", bytes.NewReader(b))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, s.tavilyBaseURL, bytes.NewReader(b))
 	if err != nil {
 		return nil, err
 	}
